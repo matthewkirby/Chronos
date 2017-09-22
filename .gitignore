@@ -1,0 +1,11 @@
+# compiled python files
+*.pyc
+
+# emacs backup files
+*~
+
+# stuff made from the setup.py file
+build*
+*.egg-info
+dist*
+*.so
