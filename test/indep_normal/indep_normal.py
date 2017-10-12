@@ -1,7 +1,7 @@
 import ctypes
 import numpy as np
 import matplotlib.pyplot as plt
-from corner import corner
+from chainconsumer import ChainConsumer
 
 class SampleChain(ctypes.Structure):
     _fields_ = [('num_samples', ctypes.c_int),
@@ -22,8 +22,8 @@ test.argtypes = [ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_int,
 test.restype = SampleResults
 
 num_params = 10
-num_samps = int(1e5)
-num_burn = int(1e4)
+num_samps = int(1e4)
+num_burn = int(1e3)
 results = test(num_params,num_samps,10,num_burn,1e-2)
 print('Acceptance Rate: ',str(results.chain.accept_rate))
 
@@ -38,5 +38,8 @@ plt.plot(range(len(likelihoods)),likelihoods)
 plt.show()
 
 # Should see independent random normal variables.
-corner(chain,truths=x_true)
+c = ChainConsumer()
+c.add_chain(chain)
+c.configure(sigma2d=False)
+fig = c.plotter.plot(truth=x_true)
 plt.show()

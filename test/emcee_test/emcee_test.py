@@ -26,8 +26,8 @@ test.restype = ETSampleResults
 
 # General params
 num_data = 10
-num_samps = int(1e5)
-num_burn = int(1e4)
+num_samps = int(1e4)
+num_burn = int(1e3)
 num_steps = 1
 epsilon = 0.05
 

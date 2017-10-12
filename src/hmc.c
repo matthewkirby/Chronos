@@ -2,6 +2,8 @@
 // Created by pierfied on 9/10/17.
 //
 
+#define TARGET_ACCEPT_RATE 0.651
+
 #include <omp.h>
 #include <stdlib.h>
 #include <math.h>
@@ -28,7 +30,8 @@ SampleChain hmc(HMCArgs hmc_args) {
     int num_samps = hmc_args.num_samples;
     int num_steps = hmc_args.num_steps;
     int num_burn = hmc_args.num_burn;
-    double epsilon = hmc_args.epsilon;
+    double epsilon_0 = hmc_args.epsilon;
+    double epsilon = epsilon_0;
 
     int num_accept = 0;
     double **samples = malloc(sizeof(double *) * num_samps);
@@ -109,6 +112,9 @@ SampleChain hmc(HMCArgs hmc_args) {
 
             if (i >= 0) num_accept++;
         }
+
+        // Perform step-size adjustment.
+        epsilon *= fmin(fmax(accept_prob/TARGET_ACCEPT_RATE,0.5),2);
 
         // Save the state if done with burn-in.
         if (i >= 0) {
